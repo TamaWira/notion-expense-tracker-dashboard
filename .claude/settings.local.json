@@ -15,7 +15,10 @@
       "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.databases\\)\\)\\)\")",
       "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.pages\\)\\)\\)\")",
       "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.search\\)\\)\\)\")",
-      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.dataSources\\)\\)\\)\")"
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.dataSources\\)\\)\\)\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
