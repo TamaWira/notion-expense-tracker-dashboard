@@ -17,7 +17,6 @@ const TYPES = ["All", "Income", "Expense"] as const;
 
 export default function FiltersDesktopDock(props: Props) {
   return (
-    // Suspense needed because inner components call useSearchParams
     <Suspense>
       <DockInner {...props} />
     </Suspense>
@@ -35,19 +34,9 @@ function DockInner({ currentMonth, currentType, selectedCategories }: Props) {
   const next = format(addMonths(current, 1), "yyyy-MM");
   const monthLabel = format(current, "MMMM yyyy");
 
-  function navigate(key: string, value: string, extra?: Record<string, string | null>) {
+  function navigate(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
-    if (!value) {
-      params.delete(key);
-    } else {
-      params.set(key, value);
-    }
-    if (extra) {
-      for (const [k, v] of Object.entries(extra)) {
-        if (v === null) params.delete(k);
-        else params.set(k, v);
-      }
-    }
+    if (!value) params.delete(key); else params.set(key, value);
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -84,39 +73,39 @@ function DockInner({ currentMonth, currentType, selectedCategories }: Props) {
 
   return (
     <div className="fixed bottom-4 left-1/2 z-20 -translate-x-1/2">
-      <div className="flex w-max items-start gap-6 rounded-2xl border border-gray-200 bg-white px-6 py-4 shadow-xl">
+      <div className="flex w-max items-start gap-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 py-4 shadow-xl">
 
         {/* Numbers */}
         <div className="flex flex-col gap-1.5 shrink-0">
-          <p className="text-xs font-medium text-gray-500">Numbers</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Numbers</p>
           <button
             onClick={toggle}
             title={hidden ? "Show numbers" : "Hide numbers"}
-            className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             {hidden ? <EyeIcon /> : <EyeOffIcon />}
             {hidden ? "Show" : "Hide"}
           </button>
         </div>
 
-        <div className="w-px self-stretch bg-gray-100 shrink-0" />
+        <div className="w-px self-stretch bg-gray-100 dark:bg-gray-800 shrink-0" />
 
         {/* Month */}
         <div className="flex flex-col gap-1.5 shrink-0">
-          <p className="text-xs font-medium text-gray-500">Month</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Month</p>
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => navigate("month", prev)}
-              className="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+              className="rounded-lg border border-gray-300 dark:border-gray-700 px-2.5 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               ←
             </button>
-            <span className="text-sm font-semibold text-gray-800 min-w-[100px] text-center">
+            <span className="text-sm font-semibold text-gray-800 dark:text-gray-100 min-w-[100px] text-center">
               {monthLabel}
             </span>
             <button
               onClick={() => navigate("month", next)}
-              className="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+              className="rounded-lg border border-gray-300 dark:border-gray-700 px-2.5 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               →
             </button>
@@ -124,16 +113,16 @@ function DockInner({ currentMonth, currentType, selectedCategories }: Props) {
               type="month"
               value={currentMonth}
               onChange={(e) => navigate("month", e.target.value)}
-              className="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-2.5 py-1.5 text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
         </div>
 
-        <div className="w-px self-stretch bg-gray-100 shrink-0" />
+        <div className="w-px self-stretch bg-gray-100 dark:bg-gray-800 shrink-0" />
 
         {/* Type */}
         <div className="flex flex-col gap-1.5 shrink-0">
-          <p className="text-xs font-medium text-gray-500">Type</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Type</p>
           <div className="flex gap-1.5">
             {TYPES.map((t) => (
               <button
@@ -145,8 +134,8 @@ function DockInner({ currentMonth, currentType, selectedCategories }: Props) {
                       ? "bg-emerald-500 text-white"
                       : t === "Expense"
                       ? "bg-rose-500 text-white"
-                      : "bg-gray-800 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "bg-gray-800 text-white dark:bg-gray-100 dark:text-gray-900"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 }`}
               >
                 {t}
@@ -155,17 +144,17 @@ function DockInner({ currentMonth, currentType, selectedCategories }: Props) {
           </div>
         </div>
 
-        {/* Category — only when a type is selected */}
+        {/* Category */}
         {categories && (
           <>
-            <div className="w-px self-stretch bg-gray-100 shrink-0" />
+            <div className="w-px self-stretch bg-gray-100 dark:bg-gray-800 shrink-0" />
             <div className="flex flex-col gap-1.5 flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <p className="text-xs font-medium text-gray-500">Category</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Category</p>
                 {selectedCategories.length > 0 && (
                   <button
                     onClick={clearCategories}
-                    className="text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
+                    className="text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 underline underline-offset-2 transition-colors"
                   >
                     Clear
                   </button>
@@ -177,7 +166,7 @@ function DockInner({ currentMonth, currentType, selectedCategories }: Props) {
                   return (
                     <label
                       key={cat}
-                      className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-700 select-none"
+                      className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300 select-none"
                     >
                       <input
                         type="checkbox"

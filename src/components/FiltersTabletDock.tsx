@@ -28,41 +28,41 @@ export default function FiltersTabletDock({
       {/* Backdrop */}
       {open && (
         <div
-          className="fixed inset-0 z-20 bg-black/20 backdrop-blur-sm"
+          className="fixed inset-0 z-20 bg-black/30 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
 
       <div className="fixed bottom-4 left-1/2 z-30 w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2">
-        {/* Expanded panel — slides up above the dock bar */}
+        {/* Expanded panel */}
         <div
-          className={`mb-3 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl transition-all duration-300 ease-in-out ${
+          className={`mb-3 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl transition-all duration-300 ease-in-out ${
             open ? "max-h-[70vh] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
           }`}
         >
           <div className="overflow-y-auto max-h-[70vh] p-5 space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-700">Filters</h3>
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Filters</h3>
               <button
                 onClick={() => setOpen(false)}
-                className="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                className="rounded-full p-1 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <CloseIcon />
               </button>
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-gray-500">Numbers</p>
+              <p className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">Numbers</p>
               <HideToggleButton />
             </div>
 
-            <div className="border-t border-gray-100 pt-4">
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
               <Suspense>
                 <MonthFilter currentMonth={currentMonth} />
               </Suspense>
             </div>
 
-            <div className="border-t border-gray-100 pt-4">
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
               <Suspense>
                 <TypeCategoryFilter
                   currentType={currentType}
@@ -76,25 +76,25 @@ export default function FiltersTabletDock({
         {/* Dock bar */}
         <button
           onClick={() => setOpen((o) => !o)}
-          className="flex w-full items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white px-5 py-3 shadow-lg transition-colors hover:bg-gray-50"
+          className="flex w-full items-center justify-between gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-5 py-3 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
         >
-          <div className="flex items-center gap-3 text-sm text-gray-700">
+          <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-200">
             <FilterIcon />
             <span className="font-medium">Filters</span>
             {activeCount > 0 && (
-              <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+              <span className="rounded-full bg-blue-100 dark:bg-blue-900 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300">
                 {activeCount} active
               </span>
             )}
           </div>
-          <div className="flex items-center gap-3 text-xs text-gray-400">
+          <div className="flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500">
             <span>{monthLabel}</span>
             {currentType !== "All" && (
               <span
                 className={`rounded-full px-2 py-0.5 font-medium ${
                   currentType === "Income"
-                    ? "bg-emerald-100 text-emerald-700"
-                    : "bg-rose-100 text-rose-700"
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-400"
+                    : "bg-rose-100 text-rose-700 dark:bg-rose-900 dark:text-rose-400"
                 }`}
               >
                 {currentType}

@@ -9,19 +9,10 @@ export default function HideToggleButton() {
     <button
       onClick={toggle}
       title={hidden ? "Show numbers" : "Hide numbers"}
-      className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+      className="flex items-center gap-1.5 rounded-lg border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
     >
-      {hidden ? (
-        <>
-          <EyeIcon />
-          Show
-        </>
-      ) : (
-        <>
-          <EyeOffIcon />
-          Hide
-        </>
-      )}
+      {hidden ? <EyeIcon /> : <EyeOffIcon />}
+      {hidden ? "Show" : "Hide"}
     </button>
   );
 }

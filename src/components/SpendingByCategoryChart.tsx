@@ -13,6 +13,7 @@ import {
 import type { CategoryStat } from "@/types";
 import { formatIDR } from "@/lib/format";
 import { useHideNumbers } from "@/context/HideNumbersContext";
+import { useIsDark } from "@/lib/useIsDark";
 
 const COLORS = [
   "#6366f1", "#f59e0b", "#10b981", "#ef4444", "#3b82f6",
@@ -25,30 +26,42 @@ interface Props {
 
 export default function SpendingByCategoryChart({ data }: Props) {
   const { hidden } = useHideNumbers();
+  const isDark = useIsDark();
+
+  const gridColor  = isDark ? "#374151" : "#f0f0f0";
+  const tickColor  = isDark ? "#9ca3af" : "#6b7280";
+  const tooltipBg  = isDark ? "#1f2937" : "#ffffff";
+  const tooltipBorder = isDark ? "#374151" : "#e5e7eb";
 
   if (data.length === 0) {
     return <EmptyState label="No expense data this month." />;
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-base font-semibold text-gray-700">Spending by Category</h2>
+    <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm">
+      <h2 className="mb-4 text-base font-semibold text-gray-700 dark:text-gray-200">
+        Spending by Category
+      </h2>
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={data} margin={{ top: 4, right: 8, bottom: 40, left: 8 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
           <XAxis
             dataKey="category"
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 12, fill: tickColor }}
             angle={-35}
             textAnchor="end"
             interval={0}
           />
           <YAxis
             tickFormatter={hidden ? () => "••••" : (v) => `${(v / 1000).toFixed(0)}K`}
-            tick={{ fontSize: 11 }}
+            tick={{ fontSize: 11, fill: tickColor }}
             width={56}
           />
-          <Tooltip formatter={hidden ? () => "••••••" : (value) => formatIDR(Number(value))} />
+          <Tooltip
+            formatter={hidden ? () => "••••••" : (value) => formatIDR(Number(value))}
+            contentStyle={{ backgroundColor: tooltipBg, borderColor: tooltipBorder }}
+            labelStyle={{ color: tickColor }}
+          />
           <Bar dataKey="total" radius={[4, 4, 0, 0]}>
             {data.map((_, i) => (
               <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -62,7 +75,7 @@ export default function SpendingByCategoryChart({ data }: Props) {
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm flex items-center justify-center h-48 text-gray-400 text-sm">
+    <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm flex items-center justify-center h-48 text-gray-400 dark:text-gray-500 text-sm">
       {label}
     </div>
   );

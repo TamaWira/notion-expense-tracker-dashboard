@@ -51,7 +51,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const dailyStats = computeDailyStats(transactions);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
 
       {/* Mobile + Tablet: collapsible floating dock (< lg) */}
       <div className="lg:hidden">
@@ -79,8 +79,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
 
           {/* Page header */}
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Finance Dashboard</h1>
-            <p className="mt-0.5 text-sm text-gray-400">{startDate} — {endDate}</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">Finance Dashboard</h1>
+            <p className="mt-0.5 text-sm text-gray-400 dark:text-gray-500">{startDate} — {endDate}</p>
           </div>
 
           {/* Stats */}

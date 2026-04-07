@@ -10,9 +10,9 @@ interface StatCardProps {
 }
 
 const variantStyles = {
-  income: "border-emerald-500 bg-emerald-50 text-emerald-700",
-  expense: "border-rose-500 bg-rose-50 text-rose-700",
-  balance: "border-blue-500 bg-blue-50 text-blue-700",
+  income:  "border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
+  expense: "border-rose-500 bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-400",
+  balance: "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
 };
 
 export default function StatCard({ label, amount, variant }: StatCardProps) {
