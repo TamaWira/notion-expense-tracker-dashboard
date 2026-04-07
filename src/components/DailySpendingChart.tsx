@@ -13,12 +13,15 @@ import {
 import { format, parseISO } from "date-fns";
 import type { DailyStat } from "@/types";
 import { formatIDR } from "@/lib/format";
+import { useHideNumbers } from "@/context/HideNumbersContext";
 
 interface Props {
   data: DailyStat[];
 }
 
 export default function DailySpendingChart({ data }: Props) {
+  const { hidden } = useHideNumbers();
+
   if (data.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm flex items-center justify-center h-48 text-gray-400 text-sm">
@@ -40,11 +43,11 @@ export default function DailySpendingChart({ data }: Props) {
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
           <XAxis dataKey="label" tick={{ fontSize: 11 }} />
           <YAxis
-            tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`}
+            tickFormatter={hidden ? () => "••••" : (v) => `${(v / 1000).toFixed(0)}K`}
             tick={{ fontSize: 11 }}
             width={56}
           />
-          <Tooltip formatter={(value) => formatIDR(Number(value))} />
+          <Tooltip formatter={hidden ? () => "••••••" : (value) => formatIDR(Number(value))} />
           <Legend />
           <Line
             type="monotone"

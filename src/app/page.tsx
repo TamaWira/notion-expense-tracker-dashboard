@@ -10,6 +10,7 @@ import IncomeExpenseDonut from "@/components/IncomeExpenseDonut";
 import TransactionTable from "@/components/TransactionTable";
 import MonthFilter from "@/components/MonthFilter";
 import TypeCategoryFilter from "@/components/TypeCategoryFilter";
+import HideToggleButton from "@/components/HideToggleButton";
 
 interface PageProps {
   searchParams: Promise<{
@@ -62,9 +63,12 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               {startDate} — {endDate}
             </p>
           </div>
-          <Suspense>
-            <MonthFilter currentMonth={month} />
-          </Suspense>
+          <div className="flex items-center gap-2">
+            <HideToggleButton />
+            <Suspense>
+              <MonthFilter currentMonth={month} />
+            </Suspense>
+          </div>
         </div>
 
         {/* Filters */}

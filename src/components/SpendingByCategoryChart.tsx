@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import type { CategoryStat } from "@/types";
 import { formatIDR } from "@/lib/format";
+import { useHideNumbers } from "@/context/HideNumbersContext";
 
 const COLORS = [
   "#6366f1", "#f59e0b", "#10b981", "#ef4444", "#3b82f6",
@@ -23,6 +24,8 @@ interface Props {
 }
 
 export default function SpendingByCategoryChart({ data }: Props) {
+  const { hidden } = useHideNumbers();
+
   if (data.length === 0) {
     return <EmptyState label="No expense data this month." />;
   }
@@ -41,11 +44,11 @@ export default function SpendingByCategoryChart({ data }: Props) {
             interval={0}
           />
           <YAxis
-            tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`}
+            tickFormatter={hidden ? () => "••••" : (v) => `${(v / 1000).toFixed(0)}K`}
             tick={{ fontSize: 11 }}
             width={56}
           />
-          <Tooltip formatter={(value) => formatIDR(Number(value))} />
+          <Tooltip formatter={hidden ? () => "••••••" : (value) => formatIDR(Number(value))} />
           <Bar dataKey="total" radius={[4, 4, 0, 0]}>
             {data.map((_, i) => (
               <Cell key={i} fill={COLORS[i % COLORS.length]} />

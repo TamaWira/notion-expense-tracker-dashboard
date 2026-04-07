@@ -3,12 +3,14 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import type { DashboardStats } from "@/types";
 import { formatIDR } from "@/lib/format";
+import { useHideNumbers } from "@/context/HideNumbersContext";
 
 interface Props {
   stats: DashboardStats;
 }
 
 export default function IncomeExpenseDonut({ stats }: Props) {
+  const { hidden } = useHideNumbers();
   const { totalIncome, totalExpense } = stats;
 
   if (totalIncome === 0 && totalExpense === 0) {
@@ -41,7 +43,7 @@ export default function IncomeExpenseDonut({ stats }: Props) {
             <Cell fill="#10b981" />
             <Cell fill="#ef4444" />
           </Pie>
-          <Tooltip formatter={(value) => formatIDR(Number(value))} />
+          <Tooltip formatter={hidden ? () => "••••••" : (value) => formatIDR(Number(value))} />
           <Legend />
         </PieChart>
       </ResponsiveContainer>

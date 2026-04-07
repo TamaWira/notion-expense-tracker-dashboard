@@ -3,12 +3,15 @@
 import { format, parseISO } from "date-fns";
 import type { Transaction } from "@/types";
 import { formatIDR } from "@/lib/format";
+import { useHideNumbers } from "@/context/HideNumbersContext";
 
 interface Props {
   transactions: Transaction[];
 }
 
 export default function TransactionTable({ transactions }: Props) {
+  const { hidden } = useHideNumbers();
+
   if (transactions.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm text-center text-sm text-gray-400">
@@ -63,8 +66,7 @@ export default function TransactionTable({ transactions }: Props) {
                     t.type === "Income" ? "text-emerald-600" : "text-rose-600"
                   }`}
                 >
-                  {t.type === "Expense" ? "−" : "+"}
-                  {formatIDR(t.price)}
+                  {hidden ? "••••••" : `${t.type === "Expense" ? "−" : "+"}${formatIDR(t.price)}`}
                 </td>
               </tr>
             ))}

@@ -1,4 +1,7 @@
+"use client";
+
 import { formatIDR } from "@/lib/format";
+import { useHideNumbers } from "@/context/HideNumbersContext";
 
 interface StatCardProps {
   label: string;
@@ -13,10 +16,14 @@ const variantStyles = {
 };
 
 export default function StatCard({ label, amount, variant }: StatCardProps) {
+  const { hidden } = useHideNumbers();
+
   return (
     <div className={`rounded-xl border-l-4 p-5 shadow-sm ${variantStyles[variant]}`}>
       <p className="text-sm font-medium opacity-70">{label}</p>
-      <p className="mt-1 text-2xl font-bold tracking-tight">{formatIDR(amount)}</p>
+      <p className="mt-1 text-2xl font-bold tracking-tight">
+        {hidden ? "••••••" : formatIDR(amount)}
+      </p>
     </div>
   );
 }
