@@ -8,15 +8,14 @@ import SpendingByCategoryChart from "@/components/SpendingByCategoryChart";
 import DailySpendingChart from "@/components/DailySpendingChart";
 import IncomeExpenseDonut from "@/components/IncomeExpenseDonut";
 import TransactionTable from "@/components/TransactionTable";
-import MonthFilter from "@/components/MonthFilter";
-import TypeCategoryFilter from "@/components/TypeCategoryFilter";
-import HideToggleButton from "@/components/HideToggleButton";
+import FiltersTabletDock from "@/components/FiltersTabletDock";
+import FiltersDesktopDock from "@/components/FiltersDesktopDock";
 
 interface PageProps {
   searchParams: Promise<{
     month?: string;
     type?: string;
-    category?: string; // comma-separated, e.g. "Food,Coffee"
+    category?: string;
   }>;
 }
 
@@ -47,59 +46,63 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const all = await getTransactions(startDate, endDate);
   const transactions = applyFilters(all, typeFilter, categoryFilter);
 
-
   const stats = computeStats(transactions);
   const categoryStats = computeCategoryStats(transactions);
   const dailyStats = computeDailyStats(transactions);
 
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-8 sm:px-8">
-      <div className="mx-auto max-w-6xl space-y-6">
-        {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="min-h-screen bg-gray-50">
+
+      {/* Mobile + Tablet: collapsible floating dock (< lg) */}
+      <div className="lg:hidden">
+        <FiltersTabletDock
+          currentMonth={month}
+          currentType={typeFilter}
+          selectedCategories={categoryFilter}
+        />
+      </div>
+
+      {/* Desktop: always-expanded bottom dock (lg+) */}
+      <div className="hidden lg:block">
+        <FiltersDesktopDock
+          currentMonth={month}
+          currentType={typeFilter}
+          selectedCategories={categoryFilter}
+        />
+      </div>
+
+      {/* Main content
+            < lg : pb-28  — clears the collapsible dock
+            lg+  : pb-32  — clears the desktop dock (taller when categories shown) */}
+      <main className="px-4 py-6 pb-28 sm:px-6 lg:px-10 lg:pb-36">
+        <div className="mx-auto max-w-5xl space-y-6">
+
+          {/* Page header */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Finance Dashboard</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {startDate} — {endDate}
-            </p>
+            <p className="mt-0.5 text-sm text-gray-400">{startDate} — {endDate}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <HideToggleButton />
-            <Suspense>
-              <MonthFilter currentMonth={month} />
-            </Suspense>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <StatCard label="Total Income" amount={stats.totalIncome} variant="income" />
+            <StatCard label="Total Expense" amount={stats.totalExpense} variant="expense" />
+            <StatCard label="Net Balance" amount={stats.netBalance} variant="balance" />
           </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <SpendingByCategoryChart data={categoryStats} />
+            <IncomeExpenseDonut stats={stats} />
+          </div>
+
+          {/* Daily line chart */}
+          <DailySpendingChart data={dailyStats} />
+
+          {/* Transactions table */}
+          <TransactionTable transactions={transactions} />
         </div>
-
-        {/* Filters */}
-        <div className="rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-          <Suspense>
-            <TypeCategoryFilter
-              currentType={typeFilter}
-              selectedCategories={categoryFilter}
-            />
-          </Suspense>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <StatCard label="Total Income" amount={stats.totalIncome} variant="income" />
-          <StatCard label="Total Expense" amount={stats.totalExpense} variant="expense" />
-          <StatCard label="Net Balance" amount={stats.netBalance} variant="balance" />
-        </div>
-
-        {/* Charts row */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <SpendingByCategoryChart data={categoryStats} />
-          <IncomeExpenseDonut stats={stats} />
-        </div>
-
-        {/* Daily line chart */}
-        <DailySpendingChart data={dailyStats} />
-
-        {/* Transactions table */}
-        <TransactionTable transactions={transactions} />
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

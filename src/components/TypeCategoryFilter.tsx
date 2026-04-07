@@ -23,7 +23,7 @@ export default function TypeCategoryFilter({ currentType, selectedCategories }: 
     } else {
       params.set("type", type);
     }
-    params.delete("category"); // reset categories on type change
+    params.delete("category");
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -56,10 +56,10 @@ export default function TypeCategoryFilter({ currentType, selectedCategories }: 
     currentType === "Income" ? "accent-emerald-500" : "accent-rose-500";
 
   return (
-    <div className="flex flex-col gap-3">
-      {/* Type pills */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs font-medium text-gray-500 w-16 shrink-0">Type</span>
+    <div className="flex flex-col gap-4">
+      {/* Type */}
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-medium text-gray-500">Type</p>
         <div className="flex gap-1.5 flex-wrap">
           {TYPES.map((t) => (
             <button
@@ -81,41 +81,37 @@ export default function TypeCategoryFilter({ currentType, selectedCategories }: 
         </div>
       </div>
 
-      {/* Category checkboxes — only shown when Income or Expense is selected */}
+      {/* Category checkboxes */}
       {categories && (
-        <div className="flex items-start gap-2">
-          <span className="text-xs font-medium text-gray-500 w-16 shrink-0 pt-0.5">
-            Category
-          </span>
-          <div className="flex flex-col gap-1.5 w-full">
-            <div className="flex flex-wrap gap-x-5 gap-y-1.5">
-              {categories.map((cat) => {
-                const checked = selectedCategories.includes(cat);
-                return (
-                  <label
-                    key={cat}
-                    className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-700 select-none"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => toggleCategory(cat)}
-                      className={`h-3.5 w-3.5 rounded ${accentChecked}`}
-                    />
-                    {cat}
-                  </label>
-                );
-              })}
-            </div>
-            {selectedCategories.length > 0 && (
-              <button
-                onClick={clearCategories}
-                className="mt-0.5 self-start text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
-              >
-                Clear selection
-              </button>
-            )}
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-medium text-gray-500">Category</p>
+          <div className="flex flex-col gap-2">
+            {categories.map((cat) => {
+              const checked = selectedCategories.includes(cat);
+              return (
+                <label
+                  key={cat}
+                  className="flex cursor-pointer items-center gap-2 text-sm text-gray-700 select-none"
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => toggleCategory(cat)}
+                    className={`h-3.5 w-3.5 rounded ${accentChecked}`}
+                  />
+                  {cat}
+                </label>
+              );
+            })}
           </div>
+          {selectedCategories.length > 0 && (
+            <button
+              onClick={clearCategories}
+              className="mt-1 self-start text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
+            >
+              Clear selection
+            </button>
+          )}
         </div>
       )}
     </div>

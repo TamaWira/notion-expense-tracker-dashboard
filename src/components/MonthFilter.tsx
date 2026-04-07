@@ -24,27 +24,30 @@ export default function MonthFilter({ currentMonth }: MonthFilterProps) {
   const label = format(current, "MMMM yyyy");
 
   return (
-    <div className="flex items-center gap-4">
-      <button
-        onClick={() => navigate(prev)}
-        className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
-      >
-        ← Prev
-      </button>
-      <span className="text-lg font-semibold text-gray-800 min-w-[140px] text-center">
-        {label}
-      </span>
-      <button
-        onClick={() => navigate(next)}
-        className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
-      >
-        Next →
-      </button>
+    <div className="flex flex-col gap-2">
+      <p className="text-xs font-medium text-gray-500">Month</p>
+      <div className="flex items-center justify-between gap-2">
+        <button
+          onClick={() => navigate(prev)}
+          className="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+        >
+          ←
+        </button>
+        <span className="flex-1 text-center text-sm font-semibold text-gray-800">
+          {label}
+        </span>
+        <button
+          onClick={() => navigate(next)}
+          className="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+        >
+          →
+        </button>
+      </div>
       <input
         type="month"
         value={currentMonth}
         onChange={(e) => navigate(e.target.value)}
-        className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
     </div>
   );
