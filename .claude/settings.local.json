@@ -3,7 +3,19 @@
     "allow": [
       "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git --yes)",
       "Bash(npm --version)",
-      "Bash(export PATH=\"/Users/iputubayuadhyawiratama/.nvm/versions/node/v22.9.0/bin:$PATH\")"
+      "Bash(export PATH=\"/Users/iputubayuadhyawiratama/.nvm/versions/node/v22.9.0/bin:$PATH\")",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(Object.keys\\(c.databases\\)\\)\")",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(c\\)\\)\\)\")",
+      "Bash(node -e \"const d = JSON.parse\\(require\\(''''fs''''\\).readFileSync\\(''''/dev/stdin'''',''''utf8''''\\)\\); console.log\\(d.version\\)\")",
+      "Bash(node -e \"const n = require\\(''@notionhq/client''\\); console.log\\(Object.keys\\(n\\)\\)\")",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(Object.keys\\(c\\).filter\\(k => !k.startsWith\\(''_''\\)\\)\\)\")",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c\\)\\)\\)\")",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.databases\\)\\)\\)\")",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.pages\\)\\)\\)\")",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.search\\)\\)\\)\")",
+      "Bash(node -e \"const {Client} = require\\(''@notionhq/client''\\); const c = new Client\\({auth:''x''}\\); console.log\\(JSON.stringify\\(Object.keys\\(c.dataSources\\)\\)\\)\")"
     ]
   }
 }
