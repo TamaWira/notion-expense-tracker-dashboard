@@ -74,7 +74,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       {/* Main content
             < lg : pb-28  — clears the collapsible dock
             lg+  : pb-32  — clears the desktop dock (taller when categories shown) */}
-      <main className="px-4 py-6 pb-28 sm:px-6 lg:px-10 lg:pb-36">
+      <main className="px-4 py-6 pb-28 sm:px-6 lg:px-10 lg:pb-56">
         <div className="mx-auto max-w-5xl space-y-6">
 
           {/* Page header */}
