@@ -20,6 +20,7 @@ export default function TypeCategoryFilter({ currentType, selectedCategories }: 
     const params = new URLSearchParams(searchParams.toString());
     if (type === "All") params.delete("type"); else params.set("type", type);
     params.delete("category");
+    params.delete("page");
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -30,12 +31,14 @@ export default function TypeCategoryFilter({ currentType, selectedCategories }: 
       : [...selectedCategories, cat];
     if (next.length === 0) params.delete("category");
     else params.set("category", next.join(","));
+    params.delete("page");
     router.push(`${pathname}?${params.toString()}`);
   }
 
   function clearCategories() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("category");
+    params.delete("page");
     router.push(`${pathname}?${params.toString()}`);
   }
 

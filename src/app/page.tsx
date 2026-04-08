@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { format, startOfMonth, endOfMonth, parseISO } from "date-fns";
 import { getTransactions } from "@/lib/notion";
 import { computeStats, computeCategoryStats, computeDailyStats } from "@/lib/analytics";
+import { TRANSACTIONS_PAGE_SIZE } from "@/lib/constants";
 import type { Transaction } from "@/types";
 import StatCard from "@/components/StatCard";
 import SpendingByCategoryChart from "@/components/SpendingByCategoryChart";
@@ -16,6 +17,7 @@ interface PageProps {
     month?: string;
     type?: string;
     category?: string;
+    page?: string;
   }>;
 }
 
@@ -44,11 +46,24 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const endDate = format(endOfMonth(monthDate), "yyyy-MM-dd");
 
   const all = await getTransactions(startDate, endDate);
-  const transactions = applyFilters(all, typeFilter, categoryFilter);
 
-  const stats = computeStats(transactions);
-  const categoryStats = computeCategoryStats(transactions);
-  const dailyStats = computeDailyStats(transactions);
+  // Sort descending by date server-side (was previously done in the client component)
+  const filtered = applyFilters(all, typeFilter, categoryFilter)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  // Pagination
+  const totalCount = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / TRANSACTIONS_PAGE_SIZE));
+  const currentPage = Math.min(
+    Math.max(1, parseInt(params.page ?? "1", 10)),
+    totalPages
+  );
+  const pageStart = (currentPage - 1) * TRANSACTIONS_PAGE_SIZE;
+  const pageTransactions = filtered.slice(pageStart, pageStart + TRANSACTIONS_PAGE_SIZE);
+
+  const stats = computeStats(filtered);
+  const categoryStats = computeCategoryStats(filtered);
+  const dailyStats = computeDailyStats(filtered);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -71,9 +86,6 @@ export default async function DashboardPage({ searchParams }: PageProps) {
         />
       </div>
 
-      {/* Main content
-            < lg : pb-28  — clears the collapsible dock
-            lg+  : pb-32  — clears the desktop dock (taller when categories shown) */}
       <main className="px-4 py-6 pb-28 sm:px-6 lg:px-10 lg:pb-56">
         <div className="mx-auto max-w-5xl space-y-6">
 
@@ -99,8 +111,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
           {/* Daily line chart */}
           <DailySpendingChart data={dailyStats} />
 
-          {/* Transactions table */}
-          <TransactionTable transactions={transactions} />
+          {/* Transactions table — pre-sorted, pre-sliced server-side */}
+          <TransactionTable
+            transactions={pageTransactions}
+            totalCount={totalCount}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={TRANSACTIONS_PAGE_SIZE}
+          />
         </div>
       </main>
     </div>

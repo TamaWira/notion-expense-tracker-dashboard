@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { Client } from "@notionhq/client";
 import type {
   PageObjectResponse,
@@ -39,7 +40,7 @@ function parseTransaction(page: PageObjectResponse): Transaction | null {
   return { id: page.id, name, price, category, type: rawType, date };
 }
 
-export async function getTransactions(
+async function fetchTransactions(
   startDate: string,
   endDate: string
 ): Promise<Transaction[]> {
@@ -75,3 +76,11 @@ export async function getTransactions(
 
   return results.map(parseTransaction).filter(Boolean) as Transaction[];
 }
+
+// Cached wrapper — keyed by date range, revalidates every 5 minutes.
+// The cache key is [startDate, endDate] so each month gets its own entry.
+export const getTransactions = unstable_cache(
+  fetchTransactions,
+  ["transactions"],
+  { revalidate: 300, tags: ["transactions"] }
+);

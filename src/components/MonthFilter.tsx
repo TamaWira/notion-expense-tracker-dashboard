@@ -15,6 +15,7 @@ export default function MonthFilter({ currentMonth }: MonthFilterProps) {
   function navigate(month: string) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("month", month);
+    params.delete("page");
     router.push(`${pathname}?${params.toString()}`);
   }
 
