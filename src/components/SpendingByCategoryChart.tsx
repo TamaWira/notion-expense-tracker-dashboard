@@ -28,15 +28,38 @@ export default function SpendingByCategoryChart({ data }: Props) {
   const { hidden } = useHideNumbers();
   const isDark = useIsDark();
 
-  const gridColor    = isDark ? "#374151" : "#f0f0f0";
-  const tickColor    = isDark ? "#9ca3af" : "#6b7280";
-  const tooltipBg    = isDark ? "#1f2937" : "#ffffff";
+  const gridColor     = isDark ? "#374151" : "#f0f0f0";
+  const tickColor     = isDark ? "#9ca3af" : "#6b7280";
+  const tooltipBg     = isDark ? "#1f2937" : "#ffffff";
   const tooltipBorder = isDark ? "#374151" : "#e5e7eb";
-  const tooltipText  = isDark ? "#f3f4f6" : "#111827";
+  const tooltipText   = isDark ? "#f3f4f6" : "#111827";
 
   if (data.length === 0) {
     return <EmptyState label="No data this month." />;
   }
+
+  const total = data.reduce((sum, d) => sum + d.total, 0);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderPercentLabel = (props: any) => {
+    const x = Number(props.x ?? 0);
+    const y = Number(props.y ?? 0);
+    const width = Number(props.width ?? 0);
+    const value = Number(props.value ?? 0);
+    if (hidden || total === 0) return null;
+    const pct = ((value / total) * 100).toFixed(1);
+    return (
+      <text
+        x={x + width / 2}
+        y={y - 5}
+        textAnchor="middle"
+        fontSize={10}
+        fill={tickColor}
+      >
+        {pct}%
+      </text>
+    );
+  };
 
   return (
     <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm">
@@ -44,7 +67,7 @@ export default function SpendingByCategoryChart({ data }: Props) {
         Amount by Category
       </h2>
       <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={data} margin={{ top: 4, right: 8, bottom: 40, left: 8 }}>
+        <BarChart data={data} margin={{ top: 20, right: 8, bottom: 40, left: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
           <XAxis
             dataKey="category"
@@ -64,7 +87,7 @@ export default function SpendingByCategoryChart({ data }: Props) {
             itemStyle={{ color: tooltipText }}
             labelStyle={{ color: tickColor }}
           />
-          <Bar dataKey="total" radius={[4, 4, 0, 0]}>
+          <Bar dataKey="total" radius={[4, 4, 0, 0]} label={renderPercentLabel}>
             {data.map((_, i) => (
               <Cell key={i} fill={COLORS[i % COLORS.length]} />
             ))}
