@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import type { Transaction } from "@/types";
 import { formatIDR } from "@/lib/format";
 import { useHideNumbers } from "@/context/HideNumbersContext";
+import { CATEGORY_ICONS } from "@/lib/categories";
 
 interface Props {
   transactions: Transaction[];
@@ -73,7 +74,10 @@ export default function TransactionTable({
                 </td>
                 <td className="px-5 py-3 font-medium text-gray-800 dark:text-gray-100">{t.name}</td>
                 <td className="px-5 py-3">
-                  <span className="inline-block rounded-full bg-gray-100 dark:bg-gray-800 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-300">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 dark:bg-gray-800 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-300">
+                    {CATEGORY_ICONS[t.category] && (
+                      <span>{CATEGORY_ICONS[t.category]}</span>
+                    )}
                     {t.category}
                   </span>
                 </td>
