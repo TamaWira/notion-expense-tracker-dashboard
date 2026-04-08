@@ -28,10 +28,11 @@ export default function SpendingByCategoryChart({ data }: Props) {
   const { hidden } = useHideNumbers();
   const isDark = useIsDark();
 
-  const gridColor  = isDark ? "#374151" : "#f0f0f0";
-  const tickColor  = isDark ? "#9ca3af" : "#6b7280";
-  const tooltipBg  = isDark ? "#1f2937" : "#ffffff";
+  const gridColor    = isDark ? "#374151" : "#f0f0f0";
+  const tickColor    = isDark ? "#9ca3af" : "#6b7280";
+  const tooltipBg    = isDark ? "#1f2937" : "#ffffff";
   const tooltipBorder = isDark ? "#374151" : "#e5e7eb";
+  const tooltipText  = isDark ? "#f3f4f6" : "#111827";
 
   if (data.length === 0) {
     return <EmptyState label="No data this month." />;
@@ -59,7 +60,8 @@ export default function SpendingByCategoryChart({ data }: Props) {
           />
           <Tooltip
             formatter={hidden ? () => "••••••" : (value) => formatIDR(Number(value))}
-            contentStyle={{ backgroundColor: tooltipBg, borderColor: tooltipBorder }}
+            contentStyle={{ backgroundColor: tooltipBg, borderColor: tooltipBorder, color: tooltipText }}
+            itemStyle={{ color: tooltipText }}
             labelStyle={{ color: tickColor }}
           />
           <Bar dataKey="total" radius={[4, 4, 0, 0]}>
