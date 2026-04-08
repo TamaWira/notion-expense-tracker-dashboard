@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import HideToggleButton from "@/components/HideToggleButton";
 import MonthFilter from "@/components/MonthFilter";
 import TypeCategoryFilter from "@/components/TypeCategoryFilter";
+import RefreshButton from "@/components/RefreshButton";
 
 interface Props {
   currentMonth: string;
@@ -51,9 +52,15 @@ export default function FiltersTabletDock({
               </button>
             </div>
 
-            <div>
-              <p className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">Numbers</p>
-              <HideToggleButton />
+            <div className="flex items-center gap-3">
+              <div>
+                <p className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">Numbers</p>
+                <HideToggleButton />
+              </div>
+              <div>
+                <p className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">Data</p>
+                <RefreshButton />
+              </div>
             </div>
 
             <div className="border-t border-gray-100 dark:border-gray-800 pt-4">

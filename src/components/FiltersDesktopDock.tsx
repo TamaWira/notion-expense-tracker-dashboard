@@ -6,6 +6,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
 import type { TransactionType } from "@/types";
 import { useHideNumbers } from "@/context/HideNumbersContext";
+import RefreshButton from "@/components/RefreshButton";
 
 interface Props {
   currentMonth: string;
@@ -78,6 +79,14 @@ function DockInner({ currentMonth, currentType, selectedCategories }: Props) {
   return (
     <div className="fixed bottom-4 left-1/2 z-20 -translate-x-1/2">
       <div className="flex w-max items-start gap-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 py-4 shadow-xl">
+
+        {/* Sync */}
+        <div className="flex flex-col gap-1.5 shrink-0">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Data</p>
+          <RefreshButton />
+        </div>
+
+        <div className="w-px self-stretch bg-gray-100 dark:bg-gray-800 shrink-0" />
 
         {/* Numbers */}
         <div className="flex flex-col gap-1.5 shrink-0">
