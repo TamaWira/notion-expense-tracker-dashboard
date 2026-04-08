@@ -34,13 +34,13 @@ export default function SpendingByCategoryChart({ data }: Props) {
   const tooltipBorder = isDark ? "#374151" : "#e5e7eb";
 
   if (data.length === 0) {
-    return <EmptyState label="No expense data this month." />;
+    return <EmptyState label="No data this month." />;
   }
 
   return (
     <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm">
       <h2 className="mb-4 text-base font-semibold text-gray-700 dark:text-gray-200">
-        Spending by Category
+        Amount by Category
       </h2>
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={data} margin={{ top: 4, right: 8, bottom: 40, left: 8 }}>

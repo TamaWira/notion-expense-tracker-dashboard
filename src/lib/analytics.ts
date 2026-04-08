@@ -16,9 +16,7 @@ export function computeCategoryStats(transactions: Transaction[]): CategoryStat[
   const map = new Map<string, number>();
 
   for (const t of transactions) {
-    if (t.type === "Expense") {
-      map.set(t.category, (map.get(t.category) ?? 0) + t.price);
-    }
+    map.set(t.category, (map.get(t.category) ?? 0) + t.price);
   }
 
   return Array.from(map.entries())
