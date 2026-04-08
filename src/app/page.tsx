@@ -3,7 +3,6 @@ import { format, startOfMonth, endOfMonth, parseISO } from "date-fns";
 import { getTransactions } from "@/lib/notion";
 import { computeStats, computeCategoryStats, computeDailyStats } from "@/lib/analytics";
 import { TRANSACTIONS_PAGE_SIZE } from "@/lib/constants";
-import type { Transaction } from "@/types";
 import StatCard from "@/components/StatCard";
 import SpendingByCategoryChart from "@/components/SpendingByCategoryChart";
 import DailySpendingChart from "@/components/DailySpendingChart";
@@ -21,18 +20,6 @@ interface PageProps {
   }>;
 }
 
-function applyFilters(
-  transactions: Transaction[],
-  type: string,
-  categories: string[]
-): Transaction[] {
-  return transactions.filter((t) => {
-    if (type && type !== "All" && t.type !== type) return false;
-    if (categories.length > 0 && !categories.includes(t.category)) return false;
-    return true;
-  });
-}
-
 export default async function DashboardPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const month = params.month ?? format(new Date(), "yyyy-MM");
@@ -45,10 +32,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const startDate = format(startOfMonth(monthDate), "yyyy-MM-dd");
   const endDate = format(endOfMonth(monthDate), "yyyy-MM-dd");
 
-  const all = await getTransactions(startDate, endDate);
-
-  // Sort descending by date server-side (was previously done in the client component)
-  const filtered = applyFilters(all, typeFilter, categoryFilter)
+  // Filtering is now done inside the Notion query — no in-memory applyFilters needed
+  const filtered = (await getTransactions(startDate, endDate, typeFilter, categoryFilter))
     .sort((a, b) => b.date.localeCompare(a.date));
 
   // Pagination

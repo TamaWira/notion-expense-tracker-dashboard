@@ -40,16 +40,33 @@ function parseTransaction(page: PageObjectResponse): Transaction | null {
   return { id: page.id, name, price, category, type: rawType, date };
 }
 
+type FilterCondition = NonNullable<QueryDatabaseParameters["filter"]>;
+
 async function fetchTransactions(
   startDate: string,
-  endDate: string
+  endDate: string,
+  type: string,       // "All" | "Income" | "Expense"
+  categories: string[] // [] means no category filter
 ): Promise<Transaction[]> {
-  const filter: QueryDatabaseParameters["filter"] = {
-    and: [
-      { property: "Date", date: { on_or_after: startDate } },
-      { property: "Date", date: { on_or_before: endDate } },
-    ],
-  };
+  const and: FilterCondition[] = [
+    { property: "Date", date: { on_or_after: startDate } },
+    { property: "Date", date: { on_or_before: endDate } },
+  ];
+
+  if (type !== "All") {
+    and.push({ property: "Type", select: { equals: type } });
+  }
+
+  if (categories.length === 1) {
+    and.push({ property: "Category", select: { equals: categories[0] } });
+  } else if (categories.length > 1) {
+    and.push({
+      or: categories.map((cat) => ({
+        property: "Category",
+        select: { equals: cat },
+      })),
+    } as FilterCondition);
+  }
 
   const results: PageObjectResponse[] = [];
   let cursor: string | undefined;
@@ -57,7 +74,7 @@ async function fetchTransactions(
   do {
     const response = await notion.databases.query({
       database_id: DATABASE_ID,
-      filter,
+      filter: { and } as QueryDatabaseParameters["filter"],
       sorts: [{ property: "Date", direction: "ascending" }],
       start_cursor: cursor,
       page_size: 100,
@@ -77,8 +94,8 @@ async function fetchTransactions(
   return results.map(parseTransaction).filter(Boolean) as Transaction[];
 }
 
-// Cached wrapper — keyed by date range, revalidates every 5 minutes.
-// The cache key is [startDate, endDate] so each month gets its own entry.
+// Cached wrapper — keyed by (startDate, endDate, type, categories).
+// Each unique filter combination gets its own cache entry, revalidated every 5 minutes.
 export const getTransactions = unstable_cache(
   fetchTransactions,
   ["transactions"],
